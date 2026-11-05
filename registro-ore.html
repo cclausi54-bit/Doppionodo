@@ -95,13 +95,13 @@ tr.tot td{font-weight:700;border-bottom:0}
 .editbar{display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--accent-soft);border-radius:8px;padding:8px 10px;font-size:14px;font-weight:600}
 code{font-size:12px}
 @media (prefers-reduced-motion:no-preference){.toast{transition:opacity .2s}}
-.side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none;max-width:50%}.side .who{max-width:100%}.switch{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:6px 12px;font:500 13px var(--f-body);text-decoration:none;white-space:nowrap}.switch:active{opacity:.8}.switch .s{display:none}@media (max-width:389px){.switch .l{display:none}.switch .s{display:inline}.logo{height:48px}.brand .label{font-size:17px}}</style>
+.side{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:none;max-width:50%}.side .who{max-width:100%}.switch{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:6px 12px;font:500 13px var(--f-body);text-decoration:none;white-space:nowrap}.switch:active{opacity:.8}.switch .s{display:none}@media (max-width:389px){.switch .l{display:none}.switch .s{display:inline}.logo{height:48px}.brand .label{font-size:17px}}.top{flex-wrap:wrap;row-gap:10px}.regs{flex:1 0 100%;display:flex;gap:6px}.regs a{flex:1;text-align:center;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 6px;font:500 14px var(--f-body);text-decoration:none}.regs a[aria-current]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:600}</style>
 
 <div class="app">
 <div id="nojs" class="nojs" role="alert"><b>La pagina è aperta in anteprima e qui non può funzionare.</b> I pulsanti non rispondono perché l'anteprima di Drive, di Gmail o dell'app File non avvia le pagine. Apri il link ricevuto con Safari o Chrome.</div>
   <header class="top">
     <div class="brand"><span class="logo" role="img" aria-label="Doppionodo Interior and Rendering Studio"></span><span class="label">Registro<br>ore</span></div>
-    <div class="side"><a class="switch" id="switchReg" href="registro-spese.html"><span class="l">Passa alle spese</span><span class="s">Spese</span> →</a><button class="who" id="who" type="button">Chi sei?</button></div>
+    <button class="who" id="who" type="button">Chi sei?</button><nav class="regs" aria-label="Registri"><a href="registro-ore.html" aria-current="page">Ore</a><a href="registro-spese.html">Spese</a><a href="registro-fatture.html">Fatture</a></nav>
   </header>
   <div id="storeWarn" class="notice bad" hidden>Questo browser non conserva i dati (finestra anonima o dati del sito bloccati). Le ore inserite si perdono alla chiusura: apri la pagina in una finestra normale.</div>
 

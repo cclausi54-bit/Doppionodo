@@ -169,14 +169,14 @@ table.scala tr.gap td{border:0;padding:4px}
     <span class="muted" id="pLbl"></span>
   </div>
 </header>
-<div class="banner" id="demo" hidden><span><b>Dati di esempio.</b> Persone, tariffe, commesse, ore, spese e fatture sono inventate per mostrare come funziona la console. Quando arrivano le prime ore vere, svuota gli esempi e inserisci tariffe e commesse reali.</span><button class="btn danger small" id="demoClear" type="button">Svuota gli esempi</button></div>
+<div class="banner" id="fileWarn" hidden style="background:#F6E3E1"><span><b style="color:#AE3A3A">Console aperta come file dal computer.</b> In questo modo il browser può cancellare i dati alla chiusura e farvi ripartire dagli esempi. Apritela dal link del sito (…github.io/…/controllo-commesse.html), salvato tra i preferiti, oppure collegate un file dei dati in Anagrafiche: così i dati restano comunque.</span></div><div class="banner" id="fsBanner" hidden style="background:#DDE7EA"><span><b style="color:#2E4D5A">Riprendete i dati dal file.</b> Per sicurezza Chrome chiede il permesso una volta per sessione prima di leggere e scrivere il file «<span id="fsBName"></span>».</span><button class="btn small" id="fsResume" type="button">Riprendi i dati</button></div><div class="banner" id="demo" hidden><span><b>Dati di esempio.</b> Persone, tariffe, commesse, ore, spese e fatture sono inventate per mostrare come funziona la console. Quando arrivano le prime ore vere, svuota gli esempi e inserisci tariffe e commesse reali. <b>Se avevate già i vostri dati</b>, la console è stata aperta da un indirizzo o da un browser diverso dal solito: andate in Anagrafiche e usate «Ripristina da archivio».</span><button class="btn danger small" id="demoClear" type="button">Svuota gli esempi</button></div>
 
 <nav class="tabs" role="tablist" aria-label="Sezioni">
   <button role="tab" data-v="v-cru" aria-selected="true">Cruscotto</button>
   <button role="tab" data-v="v-mat" aria-selected="false">Matrice commesse</button>
   <button role="tab" data-v="v-com" aria-selected="false">Singola commessa</button>
   <button role="tab" data-v="v-ce" aria-selected="false">Conto economico</button>
-  <button role="tab" data-v="v-imp" aria-selected="false">Importa ore e spese</button>
+  <button role="tab" data-v="v-imp" aria-selected="false">Importa ore, spese e fatture</button>
   <button role="tab" data-v="v-ana" aria-selected="false">Anagrafiche e tariffe</button>
 </nav>
 
@@ -273,7 +273,7 @@ table.scala tr.gap td{border:0;padding:4px}
 
 <!-- IMPORTA -->
 <section class="view" id="v-imp" hidden>
-  <div><h1>Importa ore e spese</h1><p class="hint">Carica i file arrivati dal registro ore e dal registro spese (anche più file insieme, anche mescolati) oppure incolla il testo copiato da un messaggio: la console riconosce da sola se sono ore o spese. Le righe già importate non vengono contate due volte; quelle corrette o cancellate da chi le ha registrate si aggiornano da sole.</p></div>
+  <div><h1>Importa ore, spese e fatture</h1><p class="hint">Carica i file arrivati dai registri ore, spese e fatture (anche più file insieme, anche mescolati) oppure incolla il testo copiato da un messaggio: la console riconosce da sola se sono ore, spese o fatture. Le righe già importate non vengono contate due volte; quelle corrette o cancellate da chi le ha registrate si aggiornano da sole.</p></div>
   <label class="drop" id="drop" for="iFiles"><b>Trascina qui i file .csv</b><span class="muted">oppure clicca per sceglierli</span><input type="file" id="iFiles" accept=".csv,text/csv,text/plain" multiple hidden></label>
   <div class="panel"><h3>Oppure incolla il testo</h3><textarea id="iTxt" rows="5" class="mono" placeholder="id;persona;data;settimana;commessa;…" style="margin-top:8px"></textarea><div class="btns" style="margin-top:8px"><button class="btn" type="button" id="iGo">Importa il testo</button></div></div>
   <div class="panel" id="iRes" hidden></div>
@@ -291,13 +291,14 @@ table.scala tr.gap td{border:0;padding:4px}
     <div class="tblwrap edit" style="margin-top:12px"><table id="eC"></table></div></div>
   <div class="panel"><div class="sechead"><div><h2>Categorie di spesa</h2><p class="hint">La voce decide in quale riga del conto economico finisce la spesa. Il nome deve restare uguale a quello del registro spese: se lo cambiate, rimandate il codice di configurazione.</p></div><button class="btn ghost small" type="button" id="addK">Aggiungi categoria</button></div>
     <div class="tblwrap edit" style="margin-top:12px"><table id="eK"></table></div></div>
+  <div class="panel" id="fsPanel"><div class="sechead"><div><h2>File dei dati</h2><p class="hint">Con Chrome o Edge sul computer la console salva tutto, a ogni modifica, anche in un file scelto da voi, per esempio nella cartella di Google Drive. Se il browser perde la memoria, alla riapertura i dati si riprendono dal file con un clic. Il file vale anche come archivio: «Ripristina da archivio» lo legge.</p></div></div><p id="fsStat" style="margin:10px 0 0;font-size:14px"></p><div class="btns" style="margin-top:10px"><button class="btn" type="button" id="fsNew">Collega un file nuovo</button><button class="btn ghost" type="button" id="fsOpen">Usa un file già esistente</button><button class="btn ghost" type="button" id="fsOff" hidden>Scollega il file</button></div></div>
   <div class="grid2">
-    <div class="panel"><h2>Configurazione per i registri ore e spese</h2><p class="hint" style="margin-top:6px">Un solo codice per tutti e due i registri. Contiene solo codici e descrizioni delle commesse, attività, categorie di spesa e nomi: niente costi né tariffe. Mandatelo a socie e collaboratori ogni volta che aprite o chiudete una commessa; lo incollano in Impostazioni.</p>
+    <div class="panel"><h2>Configurazione per i registri</h2><p class="hint" style="margin-top:6px">Un solo codice per i registri ore, spese e fatture: basta incollarlo in uno dei tre, gli altri lo prendono da soli. Contiene solo codici, descrizioni e clienti delle commesse, attività, categorie di spesa e nomi: niente costi né tariffe. Mandatelo a socie e collaboratori ogni volta che aprite o chiudete una commessa; lo incollano in Impostazioni.</p>
       <div class="btns" style="margin-top:10px"><button class="btn" type="button" id="cfgCopy">Copia il codice</button><button class="btn ghost" type="button" id="cfgDown">Scarica il file</button></div>
       <textarea id="cfgTxt" rows="4" class="mono" readonly hidden style="margin-top:10px" aria-label="Codice di configurazione"></textarea></div>
     <div class="panel"><h2>Archivio della console</h2><p class="hint" style="margin-top:6px">Tutto resta in questo browser. Scaricate l'archivio almeno una volta al mese e conservatelo su Drive: è la vostra copia di sicurezza e serve per aprire la console da un altro computer.</p>
       <div class="btns" style="margin-top:10px"><button class="btn" type="button" id="bDown">Scarica l'archivio</button><label class="btn ghost" for="bFile">Ripristina da archivio<input type="file" id="bFile" accept=".json,application/json" hidden></label></div>
-      <p class="hint">Versione 3 · 29 ottobre 2026 · con spese, fatture e conto economico</p>
+      <p class="hint">Versione 3.2 · 5 novembre 2026 · fatture dal registro e file dei dati</p>
       <p class="hint" id="bInfo" style="margin-top:8px"></p></div>
   </div>
 </section>
@@ -391,7 +392,49 @@ function load(){try{var r=localStorage.getItem(KEY);if(r){var s=JSON.parse(r),b=
   /* console della versione 2 ancora con gli esempi: aggiunge anche spese e fatture d'esempio */
   if(nuovo&&s.esempio)demoSpese(s);return s;}}catch(e){}return demo();}
 S=load();
-function save(){S.salvato=nowIso();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){toast("Il browser non riesce a salvare: scaricate l'archivio per non perdere i dati");}}
+try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+function save(){S.salvato=nowIso();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){if(!(FS&&FS.ok))toast("Il browser non riesce a salvare: scaricate l'archivio per non perdere i dati");}fsQueue();}
+/* ---------- file dei dati (Chrome/Edge): una copia di tutto in un file scelto da voi ---------- */
+var FS={h:null,ok:false,need:false,last:null,err:null,t:null,supported:typeof window.showSaveFilePicker==="function"};
+var FS_TYPES=[{description:"Dati della console Doppionodo",accept:{"application/json":[".json"]}}];
+function fsDb(){return new Promise(function(res,rej){var r=indexedDB.open("dn_console_file",1);r.onupgradeneeded=function(){r.result.createObjectStore("h");};r.onsuccess=function(){res(r.result);};r.onerror=function(){rej(r.error);};});}
+function fsGet(){return fsDb().then(function(db){return new Promise(function(res){var q=db.transaction("h").objectStore("h").get("dati");q.onsuccess=function(){res(q.result||null);};q.onerror=function(){res(null);};});}).catch(function(){return null;});}
+function fsSet(h){return fsDb().then(function(db){return new Promise(function(res){var tx=db.transaction("h","readwrite");if(h)tx.objectStore("h").put(h,"dati");else tx.objectStore("h").delete("dati");tx.oncomplete=function(){res();};tx.onerror=function(){res();};});}).catch(function(){});}
+function fsQueue(){if(!FS||!FS.ok)return;clearTimeout(FS.t);FS.t=setTimeout(fsWrite,400);}
+function fsWrite(){if(!FS.ok||!FS.h)return Promise.resolve();var data=JSON.stringify(S);
+  return FS.h.createWritable().then(function(w){return w.write(data).then(function(){return w.close();});}).then(function(){FS.last=new Date();FS.err=null;fsRender();},
+    function(e){FS.err=(e&&e.name==="NotAllowedError")?"Chrome non ha dato il permesso di scrivere il file":"Il file non si riesce a scrivere ("+((e&&e.message)||"errore")+")";FS.ok=false;FS.need=true;fsRender();toast("Il file dei dati non si aggiorna: premete «Riprendi i dati» in alto");});}
+/* tra la memoria del browser e il file vince il più recente; gli esempi perdono sempre */
+function fsAdopt(txt,why){var s;try{s=JSON.parse(txt);if(!Array.isArray(s.entries)||!Array.isArray(s.commesse))throw 0;}catch(e){toast("Il file scelto non contiene dati della console");return false;}
+  var fileT=s.salvato||"",locT=S.salvato||"";
+  var cnt=function(x){return (x.entries||[]).length+(x.spese||[]).length+(x.ricavi||[]).length+(x.commesse||[]).length;};
+  var useFile=(S.esempio&&!s.esempio)||fileT>locT;
+  /* il browser è più recente ma ha meno dati: forse è ripartito da zero mentre il file aspettava il permesso */
+  if(!useFile&&locT>fileT&&!s.esempio&&cnt(S)<cnt(s))useFile=window.confirm("Il file dei dati contiene più registrazioni di quelle che vedete ora ("+cnt(s)+" contro "+cnt(S)+").\n\nOK = riprendo i dati dal file\nAnnulla = tengo quelli attuali e aggiorno il file");
+  if(useFile){var b=defaults();for(var k in b)if(!(k in s))s[k]=b[k];S=s;
+    try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}
+    maps();renderAll();toast("Dati ripresi dal file: "+S.entries.length+" ore, "+S.spese.length+" spese, "+S.ricavi.length+" fatture");}
+  else if(locT>fileT){fsWrite();if(why==="open")toast("I dati di questo browser erano più recenti: il file è stato aggiornato");}
+  return true;}
+function fsRead(why){return FS.h.getFile().then(function(f){return f.text();}).then(function(t){if(!t.trim())return fsWrite();fsAdopt(t,why);fsRender();},function(e){FS.err="Il file non si riesce a leggere: forse è stato spostato o rinominato. Collegatelo di nuovo.";FS.ok=false;fsRender();});}
+function fsRender(){var st=document.getElementById("fsStat"),bn=document.getElementById("fsBanner");if(!st)return;
+  document.getElementById("fsOff").hidden=!FS.h;
+  document.getElementById("fsBName").textContent=FS.h?FS.h.name:"";
+  bn.hidden=!(FS.h&&FS.need);
+  if(!FS.supported){st.innerHTML='<span class="muted">Questo browser non permette di collegare un file: serve Chrome o Edge sul computer. Restano l\'archivio e il ripristino.</span>';["fsNew","fsOpen"].forEach(function(id){document.getElementById(id).disabled=true;});return;}
+  if(!FS.h){st.innerHTML='<span class="pill p-warn">Nessun file collegato</span> I dati stanno solo nella memoria di questo browser.';return;}
+  if(FS.err){st.innerHTML='<span class="pill p-bad">Problema</span> '+esc(FS.err);return;}
+  if(FS.need){st.innerHTML='<span class="pill p-warn">In attesa</span> File «'+esc(FS.h.name)+'» collegato: premete «Riprendi i dati» in alto per riattivarlo.';return;}
+  st.innerHTML='<span class="pill p-ok">Attivo</span> Ogni modifica viene salvata anche nel file «<b>'+esc(FS.h.name)+'</b>»'+(FS.last?", l'ultima alle "+FS.last.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"}):"")+".";}
+function fsLink(h,why){FS.h=h;FS.ok=true;FS.need=false;FS.err=null;fsSet(h);return why==="new"?fsWrite():fsRead("open");}
+function fsInit(){fsRender();if(!FS.supported)return;
+  document.getElementById("fsNew").addEventListener("click",function(){window.showSaveFilePicker({suggestedName:"console-doppionodo-dati.json",types:FS_TYPES}).then(function(h){return fsLink(h,"new").then(function(){toast("File collegato: da ora ogni modifica finisce anche lì");});}).catch(function(e){if(!e||e.name!=="AbortError")toast("Il file non si è potuto collegare");});});
+  document.getElementById("fsOpen").addEventListener("click",function(){window.showOpenFilePicker({types:FS_TYPES,multiple:false}).then(function(a){var h=a[0];return h.requestPermission({mode:"readwrite"}).then(function(p){if(p!=="granted"){toast("Senza permesso di scrittura il file non si può usare");return;}return fsLink(h,"open");});}).catch(function(e){if(!e||e.name!=="AbortError")toast("Il file non si è potuto aprire");});});
+  arm(document.getElementById("fsOff"),"Conferma: scollega",function(){FS.h=null;FS.ok=false;FS.need=false;FS.err=null;fsSet(null);fsRender();renderAll();toast("File scollegato: il file resta dov'è, ma non si aggiorna più");});
+  document.getElementById("fsResume").addEventListener("click",function(){if(!FS.h)return;FS.h.requestPermission({mode:"readwrite"}).then(function(p){if(p!=="granted"){toast("Permesso non dato: i dati restano solo nel browser");return;}FS.ok=true;FS.need=false;FS.err=null;fsRead("resume");}).catch(function(){toast("Il file non si riesce a riaprire: collegatelo di nuovo in Anagrafiche");});});
+  fsGet().then(function(h){if(!h)return fsRender();FS.h=h;
+    (h.queryPermission?h.queryPermission({mode:"readwrite"}):Promise.resolve("prompt")).then(function(p){if(p==="granted"){FS.ok=true;fsRead("start");}else FS.need=true;fsRender();renderAll();});});}
+
 
 /* ---------- periodo ---------- */
 function period(){var k=document.getElementById("pSel").value,t=new Date(),a,b;
@@ -561,7 +604,7 @@ function renderDash(){var P=period(),per=inP(P),a=agg(per),intOre=per.filter(fun
   var so=sospesi();Object.keys(so).forEach(function(k){al.push(["p-warn","Arredi",'<b>'+esc(k)+'</b>: arredi fatturati o pagati ('+eur(so[k].ric)+' di fatture, '+eur(so[k].cos)+' di costi) senza data di consegna. Restano fuori dal conto economico finché non la indicate.']);});
   var rb={};S.spese.forEach(function(s){if(s.pagamento==="personale"&&!s.rimborsata)rb[s.persona]=(rb[s.persona]||0)+(+s.totale||0);});
   Object.keys(rb).forEach(function(p){al.push(["p-info","Rimborso",'<b>'+esc(p)+'</b> ha anticipato '+eur2(rb[p])+' di spese non ancora rimborsate.']);});
-  var oggi=ymd(new Date());S.ricavi.forEach(function(r){if(!r.incassata&&days(r.data,oggi)>60)al.push(["p-warn","Incasso",'La fattura <b>'+esc(r.numero||"senza numero")+'</b> di '+fdate(r.data)+' ('+esc(r.commessa)+', '+eur2((+r.imponibile||0)+(+r.iva||0))+') non risulta incassata da oltre 60 giorni.']);});
+  var oggi=ymd(new Date());S.ricavi.forEach(function(r){if(r.incassata)return;var tx='La fattura <b>'+esc(r.numero||"senza numero")+'</b> di '+fdate(r.data)+' ('+esc(r.commessa)+(r.cliente?", "+esc(r.cliente):"")+', '+eur2((+r.imponibile||0)+(+r.iva||0))+')';if(r.scadenza){if(r.scadenza<oggi)al.push(["p-warn","Incasso",tx+" è scaduta il "+fdate(r.scadenza)+" e non risulta incassata."]);}else if(days(r.data,oggi)>60)al.push(["p-warn","Incasso",tx+" non risulta incassata da oltre 60 giorni."]);});
   matrixRows(P,"tutte").forEach(function(r){if(r.c.codice==="INT")return;r.sit.forEach(function(s){if(s[1]==="Margine negativo")al.push(["p-bad","Margine",'<b>'+esc(r.c.codice)+'</b>: nel periodo il costo delle ore ('+eur(r.p.costo)+') supera il loro valore a tariffa ('+eur(r.p.prezzo)+').']);
     if(s[1].indexOf("Ferma")===0&&r.c.stato!=="chiusa")al.push(["p-warn","Ferma",'<b>'+esc(r.c.codice)+'</b> è aperta ma nessuno ci registra ore da '+s[1].replace("Ferma da ","")+'. Va chiusa o sollecitata?']);
     if(s[1].indexOf("Oltre il piano")===0)al.push(["p-bad","Piano",'<b>'+esc(r.c.codice)+'</b>: registrate '+fh(r.pi.used)+' h su '+fh(r.pi.plan)+' pianificate ('+pct(r.pi.pct)+').']);
@@ -713,8 +756,8 @@ function renderCe(){var P=period(),D=ceData(P),T=D.T;
   if(!document.getElementById("rData").value)document.getElementById("rData").value=ymd(new Date());
   var RI=S.ricavi.filter(function(r){return r.data>=P.da&&r.data<=P.a;}).sort(function(a,b){return a.data<b.data?1:-1;});
   var rt=document.getElementById("ceRic");
-  rt.innerHTML='<thead><tr><th>Data</th><th>Numero</th><th>Commessa</th><th>Tipo</th><th class="n">Imponibile</th><th class="n">IVA</th><th class="n">Totale</th><th>Incassata</th><th>Nota</th><th></th></tr></thead><tbody>'+(RI.length?RI.map(function(r){return "<tr><td>"+fdate(r.data)+"</td><td>"+esc(r.numero)+'</td><td><span class="code">'+esc(r.commessa)+"</span></td><td>"+(r.tipo==="arredi"?"Arredi":"Servizi")+'</td><td class="n">'+eur2(r.imponibile)+'</td><td class="n">'+eur2(r.iva)+'</td><td class="n">'+eur2((+r.imponibile||0)+(+r.iva||0))+'</td><td><input type="checkbox" data-inc="'+esc(r.id)+'"'+(r.incassata?" checked":"")+' aria-label="Incassata"></td><td class="wrap">'+esc(r.note)+'</td><td><button class="btn danger small" type="button" data-rdel="'+esc(r.id)+'">Elimina</button></td></tr>';}).join(""):'<tr><td colspan="10" class="muted">Nessuna fattura emessa nel periodo.</td></tr>')+"</tbody>";
-  [].forEach.call(rt.querySelectorAll("[data-inc]"),function(cb){cb.addEventListener("change",function(){var r=S.ricavi.find(function(x){return x.id===cb.dataset.inc;});if(r){r.incassata=cb.checked;save();renderCe();toast(cb.checked?"Fattura segnata come incassata":"Fattura di nuovo da incassare");}});});
+  rt.innerHTML='<thead><tr><th>Data</th><th>Numero</th><th>Commessa</th><th>Tipo</th><th class="n">Imponibile</th><th class="n">IVA</th><th class="n">Totale</th><th>Incassata</th><th>Nota</th><th></th></tr></thead><tbody>'+(RI.length?RI.map(function(r){return "<tr><td>"+fdate(r.data)+"</td><td>"+esc(r.numero)+(r.cliente?'<br><span class="muted">'+esc(r.cliente)+"</span>":"")+'</td><td><span class="code">'+esc(r.commessa)+"</span></td><td>"+(r.tipo==="arredi"?"Arredi":"Servizi")+(r.fase&&r.fase!=="unica"?'<br><span class="muted">'+esc(r.fase)+"</span>":"")+'</td><td class="n">'+eur2(r.imponibile)+'</td><td class="n">'+eur2(r.iva)+'</td><td class="n">'+eur2((+r.imponibile||0)+(+r.iva||0))+'</td><td><input type="checkbox" data-inc="'+esc(r.id)+'"'+(r.incassata?" checked":"")+' aria-label="Incassata"></td><td class="wrap">'+esc(r.note)+'</td><td><button class="btn danger small" type="button" data-rdel="'+esc(r.id)+'">Elimina</button></td></tr>';}).join(""):'<tr><td colspan="10" class="muted">Nessuna fattura emessa nel periodo.</td></tr>')+"</tbody>";
+  [].forEach.call(rt.querySelectorAll("[data-inc]"),function(cb){cb.addEventListener("change",function(){var r=S.ricavi.find(function(x){return x.id===cb.dataset.inc;});if(r){r.incassata=cb.checked;r.incassataDa="console";r.incassoIl=cb.checked?ymd(new Date()):"";save();renderCe();toast(cb.checked?"Fattura segnata come incassata":"Fattura di nuovo da incassare");}});});
   [].forEach.call(rt.querySelectorAll("[data-rdel]"),function(b){arm(b,"Conferma",function(){S.ricavi=S.ricavi.filter(function(x){return x.id!==b.dataset.rdel;});save();renderCe();toast("Fattura tolta");});});
   /* spese */
   var vf=document.getElementById("ceVoce").value,SP=S.spese.filter(function(s){return s.data>=P.da&&s.data<=P.a&&(!vf||voceDi(s)===vf);}).sort(function(a,b){return a.data<b.data?1:-1;});
@@ -743,7 +786,7 @@ document.getElementById("ceXlsx").addEventListener("click",function(){withXlsx(f
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ceSheetRows()),"Per commessa");
   var sp=[["Data","Persona","Fornitore","Documento","Numero","Categoria","Voce","Commessa","Pagato €","IVA €","Costo €","Pagata con","Rimborsata","Nota"]];S.spese.filter(function(s){return s.data>=P.da&&s.data<=P.a;}).sort(function(a,b){return a.data<b.data?-1:1;}).forEach(function(s){sp.push([s.data,s.persona,s.fornitore,s.documento,s.numero||"",s.categoria,VOCI[voceDi(s)],s.commessa,s.totale,s.iva,s.costo,s.pagamento==="personale"?"di tasca propria":"società",s.rimborsata?s.rimborsata.slice(0,10):"",s.note||""]);});
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(sp),"Spese");
-  var ri=[["Data","Numero","Commessa","Tipo","Imponibile €","IVA €","Totale €","Incassata","Nota"]];S.ricavi.filter(function(r){return r.data>=P.da&&r.data<=P.a;}).sort(function(a,b){return a.data<b.data?-1:1;}).forEach(function(r){ri.push([r.data,r.numero,r.commessa,r.tipo==="arredi"?"Arredi":"Servizi",r.imponibile,r.iva,Math.round(((+r.imponibile||0)+(+r.iva||0))*100)/100,r.incassata?"sì":"no",r.note||""]);});
+  var ri=[["Data","Numero","Cliente","Commessa","Tipo","Fattura di","Imponibile €","IVA €","Totale €","Scadenza","Incassata","Incassata il","Registrata da","Nota"]];S.ricavi.filter(function(r){return r.data>=P.da&&r.data<=P.a;}).sort(function(a,b){return a.data<b.data?-1:1;}).forEach(function(r){ri.push([r.data,r.numero,r.cliente||"",r.commessa,r.tipo==="arredi"?"Arredi":"Servizi",r.fase&&r.fase!=="unica"?r.fase:"",r.imponibile,r.iva,Math.round(((+r.imponibile||0)+(+r.iva||0))*100)/100,r.scadenza||"",r.incassata?"sì":"no",r.incassoIl||"",r.persona||"console",r.note||""]);});
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ri),"Fatture emesse");
   var buf=XLSX.write(wb,{type:"array",bookType:"xlsx"});download("conto_economico_"+ymd(new Date())+".xlsx",new Blob([buf],{type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}),"File Excel salvato");});});
 
@@ -773,14 +816,37 @@ function importSpese(rows,H,file){var ix=function(n){return H.indexOf(n);};
     else{S.spese.push(e);byId[e.id]=S.spese.length-1;imp.nuove++;}});
   if(Object.keys(del).length)S.spese=S.spese.filter(function(e){return !del[e.id];});
   S.imports.unshift(imp);return {imp:imp};}
+/* fatture emesse dal registro fatture delle socie */
+function importFatture(rows,H,file){var ix=function(n){return H.indexOf(n);};
+  var need=["id","data","numero","commessa","imponibile"];var miss=need.filter(function(n){return ix(n)<0;});
+  if(miss.length)return {err:"Nel file "+file+" mancano le colonne: "+miss.join(", ")+". È un file del registro fatture?"};
+  var imp={id:uid(),tipo:"fatture",file:file,quando:nowIso(),righe:0,nuove:0,aggiornate:0,eliminate:0,scartate:0,motivi:[]},byId={},del={};
+  S.ricavi.forEach(function(e,i){byId[e.id]=i;});
+  rows.slice(1).forEach(function(r,k){if(r.length===1&&!r[0].trim())return;imp.righe++;var g=function(n){var i=ix(n);return i<0?"":String(r[i]||"").trim();};
+    var e={id:g("id"),persona:g("persona").replace(/\s+/g," "),data:g("data"),numero:g("numero"),cliente:g("cliente"),commessa:g("commessa").toUpperCase(),tipo:g("tipo").toLowerCase()==="arredi"?"arredi":"servizi",fase:g("fase")||"unica",
+      imponibile:num(g("imponibile")),aliquota:g("aliquota"),iva:num(g("iva"))||0,scadenza:g("scadenza"),incassata:/^(si|sì|yes|true|1)$/i.test(g("incassata")),incassoIl:g("data_incasso"),note:g("note"),ts:g("registrato_il")||nowIso(),importId:imp.id,fonte:"registro"};
+    if(!e.id){imp.scartate++;imp.motivi.push("riga "+(k+2)+": manca l'identificativo");return;}
+    if(g("stato").toLowerCase()==="eliminata"){if(e.id in byId){del[e.id]=1;imp.eliminate++;}return;}
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(e.data)||!e.numero||!e.commessa||!(e.imponibile>0)||!(e.iva>=0)){imp.scartate++;imp.motivi.push("riga "+(k+2)+": dati incompleti o importi non validi");return;}
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(e.scadenza))e.scadenza="";
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(e.incassoIl))e.incassoIl="";
+    var keepPaid=function(old){if(!e.incassata&&old.incassata&&old.incassataDa==="console"){e.incassata=true;e.incassoIl=old.incassoIl||"";e.incassataDa="console";}};
+    if(e.id in byId){var old=S.ricavi[byId[e.id]];if(e.ts>(old.ts||"")){keepPaid(old);S.ricavi[byId[e.id]]=e;imp.aggiornate++;}return;}
+    /* stessa fattura già scritta a mano nella console: la sostituisce invece di doppiarla */
+    var j=S.ricavi.findIndex(function(x){return x.fonte!=="registro"&&x.numero&&x.numero.toLowerCase()===e.numero.toLowerCase()&&String(x.data).slice(0,4)===e.data.slice(0,4);});
+    if(j>=0){var o=S.ricavi[j];if(!e.incassata&&o.incassata){e.incassata=true;e.incassoIl=o.incassoIl||"";e.incassataDa="console";}S.ricavi[j]=e;byId[e.id]=j;imp.aggiornate++;return;}
+    S.ricavi.push(e);byId[e.id]=S.ricavi.length-1;imp.nuove++;});
+  if(Object.keys(del).length)S.ricavi=S.ricavi.filter(function(e){return !del[e.id];});
+  S.imports.unshift(imp);return {imp:imp};}
 function parseCsv(txt){txt=txt.replace(/^﻿/,"").replace(/\r\n?/g,"\n").trim();if(!txt)return [];
   var first=txt.split("\n")[0],cnt=function(ch){return first.split(ch).length;},d=cnt(";")>=cnt(",")&&cnt(";")>=cnt("\t")?";":cnt("\t")>cnt(",")?"\t":",";
   var rows=[],row=[],f="",q=false;for(var i=0;i<txt.length;i++){var ch=txt[i];
     if(q){if(ch==='"'){if(txt[i+1]==='"'){f+='"';i++;}else q=false;}else f+=ch;}
     else if(ch==='"')q=true;else if(ch===d){row.push(f);f="";}else if(ch==="\n"){row.push(f);rows.push(row);row=[];f="";}else f+=ch;}
   row.push(f);rows.push(row);return rows;}
-function importText(txt,file){var rows=parseCsv(txt);if(rows.length<2)return {err:"Il file "+file+" è vuoto o non è un file dei registri ore o spese."};
+function importText(txt,file){var rows=parseCsv(txt);if(rows.length<2)return {err:"Il file "+file+" è vuoto o non è un file dei registri ore, spese o fatture."};
   var H=rows[0].map(function(h){return h.trim().toLowerCase();}),ix=function(n){return H.indexOf(n);};
+  if(ix("imponibile")>=0&&ix("numero")>=0)return importFatture(rows,H,file);
   if(ix("totale")>=0&&ix("categoria")>=0)return importSpese(rows,H,file);
   var need=["id","persona","data","commessa","attivita","ore"];var miss=need.filter(function(n){return ix(n)<0;});
   if(miss.length)return {err:"Nel file "+file+" mancano le colonne: "+miss.join(", ")+". È un file del registro ore?"};
@@ -798,7 +864,7 @@ function importText(txt,file){var rows=parseCsv(txt);if(rows.length<2)return {er
   S.imports.unshift(imp);return {imp:imp};}
 function runImports(items){var res=[];items.forEach(function(it){res.push(importText(it.txt,it.name));});save();maps();
   var html="<h3>Esito</h3><ul class=\"log\">"+res.map(function(r){if(r.err)return '<li><span class="pill p-bad">Errore</span> '+esc(r.err)+"</li>";var i=r.imp;
-    return "<li><b>"+esc(i.file)+"</b> ("+(i.tipo==="spese"?"spese":"ore")+"): "+i.righe+" righe lette · <b>"+i.nuove+"</b> nuove · "+i.aggiornate+" aggiornate · "+i.eliminate+" cancellate · "+dupl(i)+"</li>";}).join("")+"</ul>";
+    return "<li><b>"+esc(i.file)+"</b> ("+(i.tipo==="spese"?"spese":i.tipo==="fatture"?"fatture":"ore")+"): "+i.righe+" righe lette · <b>"+i.nuove+"</b> nuove · "+i.aggiornate+" aggiornate · "+i.eliminate+" cancellate · "+dupl(i)+"</li>";}).join("")+"</ul>";
   document.getElementById("iRes").hidden=false;document.getElementById("iRes").innerHTML=html;renderAll();}
 /* già presenti = righe lette che non hanno cambiato nulla */
 function dupl(i){var d=i.righe-i.nuove-i.aggiornate-i.eliminate-i.scartate;return d+" già presenti"+(i.scartate?' · <span class="pill p-warn">'+i.scartate+" scartate</span> "+esc(i.motivi.slice(0,3).join("; ")):"");}
@@ -810,8 +876,8 @@ drop.addEventListener("drop",function(e){readFiles(e.dataTransfer.files);});
 document.getElementById("iFiles").addEventListener("change",function(){readFiles(this.files);this.value="";});
 document.getElementById("iGo").addEventListener("click",function(){var t=document.getElementById("iTxt").value;if(!t.trim()){toast("Incolla prima il testo");return;}runImports([{name:"testo incollato",txt:t}]);document.getElementById("iTxt").value="";});
 function renderImports(){var t=document.getElementById("tImp");
-  t.innerHTML='<thead><tr><th>Quando</th><th>File</th><th>Tipo</th><th class="n">Righe</th><th class="n">Nuove</th><th class="n">Aggiornate</th><th class="n">Cancellate</th><th class="n">Scartate</th><th></th></tr></thead><tbody>'+(S.imports.length?S.imports.map(function(i){return "<tr><td>"+new Date(i.quando).toLocaleString("it-IT",{dateStyle:"short",timeStyle:"short"})+"</td><td>"+esc(i.file)+"</td><td>"+(i.id==="esempio"?"esempio":i.tipo==="spese"?"spese":"ore")+'</td><td class="n">'+i.righe+'</td><td class="n">'+i.nuove+'</td><td class="n">'+i.aggiornate+'</td><td class="n">'+i.eliminate+'</td><td class="n">'+i.scartate+'</td><td><button class="btn danger small" type="button" data-u="'+i.id+'">Annulla</button></td></tr>';}).join(""):'<tr><td colspan="9" class="muted">Nessuna importazione.</td></tr>')+"</tbody>";
-  [].forEach.call(t.querySelectorAll("[data-u]"),function(b){arm(b,"Conferma",function(){var id=b.dataset.u,n=S.entries.length+S.spese.length;S.entries=S.entries.filter(function(e){return e.importId!==id;});S.spese=S.spese.filter(function(e){return e.importId!==id;});S.imports=S.imports.filter(function(i){return i.id!==id;});save();renderAll();toast("Tolte "+(n-S.entries.length-S.spese.length)+" registrazioni");});});}
+  t.innerHTML='<thead><tr><th>Quando</th><th>File</th><th>Tipo</th><th class="n">Righe</th><th class="n">Nuove</th><th class="n">Aggiornate</th><th class="n">Cancellate</th><th class="n">Scartate</th><th></th></tr></thead><tbody>'+(S.imports.length?S.imports.map(function(i){return "<tr><td>"+new Date(i.quando).toLocaleString("it-IT",{dateStyle:"short",timeStyle:"short"})+"</td><td>"+esc(i.file)+"</td><td>"+(i.id==="esempio"?"esempio":i.tipo==="spese"?"spese":i.tipo==="fatture"?"fatture":"ore")+'</td><td class="n">'+i.righe+'</td><td class="n">'+i.nuove+'</td><td class="n">'+i.aggiornate+'</td><td class="n">'+i.eliminate+'</td><td class="n">'+i.scartate+'</td><td><button class="btn danger small" type="button" data-u="'+i.id+'">Annulla</button></td></tr>';}).join(""):'<tr><td colspan="9" class="muted">Nessuna importazione.</td></tr>')+"</tbody>";
+  [].forEach.call(t.querySelectorAll("[data-u]"),function(b){arm(b,"Conferma",function(){var id=b.dataset.u,n=S.entries.length+S.spese.length+S.ricavi.length;S.entries=S.entries.filter(function(e){return e.importId!==id;});S.spese=S.spese.filter(function(e){return e.importId!==id;});S.ricavi=S.ricavi.filter(function(e){return e.importId!==id;});S.imports=S.imports.filter(function(i){return i.id!==id;});save();renderAll();toast("Tolte "+(n-S.entries.length-S.spese.length-S.ricavi.length)+" registrazioni");});});}
 
 /* ---------- anagrafiche ---------- */
 function bindEdit(tbl,arr,fields,after){[].forEach.call(tbl.querySelectorAll("[data-i]"),function(inp){inp.addEventListener("change",function(){var i=+inp.dataset.i,f=inp.dataset.f,v;
@@ -847,9 +913,9 @@ document.getElementById("addP").addEventListener("click",function(){S.persone.pu
 document.getElementById("addA").addEventListener("click",function(){S.attivita.push({nome:uniq(S.attivita,"Nuova attività"),tariffa:0,fatt:true});save();maps();renderAll();document.getElementById("a"+(S.attivita.length-1)+"n").select();});
 document.getElementById("addK").addEventListener("click",function(){S.categorie.push({nome:uniq(S.categorie,"Nuova categoria"),voce:"struttura"});save();maps();renderAll();document.getElementById("k"+(S.categorie.length-1)+"n").select();});
 document.getElementById("addC").addEventListener("click",function(){var y=new Date().getFullYear(),n=S.commesse.length,k=n;while(S.commesse.some(function(c){return c.codice==="Y-"+y+"-"+pad(k);}))k++;S.commesse.push({codice:"Y-"+y+"-"+pad(k),nome:"",cliente:"",tipo:TIPI[0],formula:"",stato:"aperta",inizio:ymd(new Date()),referente:"",note:""});save();maps();renderAll();document.getElementById("c"+n+"n").focus();});
-function configJson(){return JSON.stringify({tipo:"doppionodo-config",versione:1,data:nowIso(),commesse:S.commesse.map(function(c){return {codice:c.codice,nome:c.nome,stato:c.stato};}),attivita:S.attivita.map(function(a){return a.nome;}),categorie:S.categorie.map(function(k){return {nome:k.nome,voce:k.voce};}),persone:S.persone.map(function(p){return p.nome;})});}
+function configJson(){return JSON.stringify({tipo:"doppionodo-config",versione:1,data:nowIso(),commesse:S.commesse.map(function(c){return {codice:c.codice,nome:c.nome,stato:c.stato,cliente:c.cliente||""};}),attivita:S.attivita.map(function(a){return a.nome;}),categorie:S.categorie.map(function(k){return {nome:k.nome,voce:k.voce};}),persone:S.persone.map(function(p){return p.nome;})});}
 document.getElementById("cfgCopy").addEventListener("click",function(){var t=configJson(),ta=document.getElementById("cfgTxt");ta.value=t;
-  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){ta.hidden=true;toast("Codice copiato: mandalo a chi usa i registri ore e spese");}).catch(function(){ta.hidden=false;ta.select();toast("Codice selezionato qui sotto: copialo");});else{ta.hidden=false;ta.select();}});
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){ta.hidden=true;toast("Codice copiato: mandalo a chi usa i registri");}).catch(function(){ta.hidden=false;ta.select();toast("Codice selezionato qui sotto: copialo");});else{ta.hidden=false;ta.select();}});
 document.getElementById("cfgDown").addEventListener("click",function(){download("configurazione_registri_"+ymd(new Date())+".json",new Blob([configJson()],{type:"application/json"}),"File di configurazione salvato");});
 document.getElementById("bDown").addEventListener("click",function(){download("archivio_controllo_doppionodo_"+ymd(new Date())+".json",new Blob([JSON.stringify(S)],{type:"application/json"}),"Archivio salvato: conservalo su Drive").then(function(ok){if(ok){S.ultimoArchivio=nowIso();save();renderAll();}});});
 document.getElementById("bFile").addEventListener("change",function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){try{var s=JSON.parse(String(r.result));if(!Array.isArray(s.entries)||!Array.isArray(s.commesse))throw 0;var b=defaults();for(var k in b)if(!(k in s))s[k]=b[k];S=s;save();maps();renderAll();toast("Archivio ripristinato: "+S.entries.length+" ore, "+S.spese.length+" spese, "+S.ricavi.length+" fatture");}catch(e){toast("Questo file non è un archivio della console");}};r.readAsText(f);this.value="";});
@@ -900,13 +966,14 @@ document.getElementById("kcFile").addEventListener("change",function(){var f=thi
 var tabs=[].slice.call(document.querySelectorAll("nav.tabs button")),VIEWS=["v-cru","v-mat","v-com","v-ce","v-imp","v-ana"],cur="v-cru";
 function show(v){cur=v;document.querySelector("header.top .period").hidden=v==="v-com";tabs.forEach(function(b){b.setAttribute("aria-selected",b.dataset.v===v?"true":"false");});VIEWS.forEach(function(id){document.getElementById(id).hidden=id!==v;});renderAll();}
 tabs.forEach(function(b){b.addEventListener("click",function(){show(b.dataset.v);});});
-function renderAll(skipAnag){maps();var P=period();document.getElementById("pLbl").textContent=P.lbl;document.getElementById("demo").hidden=!S.esempio;
+function renderAll(skipAnag){maps();var P=period();document.getElementById("pLbl").textContent=P.lbl;document.getElementById("demo").hidden=!S.esempio||!!(FS&&FS.need);document.getElementById("fileWarn").hidden=location.protocol!=="file:"||!!(FS&&FS.h);
   if(cur==="v-cru")renderDash();if(cur==="v-mat")renderMatrix();if(cur==="v-com")renderCommessa();if(cur==="v-ce")renderCe();if(cur==="v-imp")renderImports();if(cur==="v-ana"&&!skipAnag)renderAnag();}
 document.getElementById("pSel").addEventListener("change",function(){document.getElementById("pCustom").hidden=this.value!=="custom";renderAll();});
 ["pDa","pA"].forEach(function(id){document.getElementById(id).addEventListener("change",function(){renderAll();});});
 var h=location.hash.replace("#","");if(h==="matrice")cur="v-mat";else if(h==="importa")cur="v-imp";else if(h==="conto")cur="v-ce";
 show(cur);
-window.__dn={importCommesse:importCommesse,parseCsv:parseCsv,importText:importText,matrixTable:matrixTable,agg:agg,ceAgg:ceAgg,commCe:commCe,ceMatrix:ceMatrix,period:period,S:function(){return S;}};
+fsInit();
+window.__dn={importCommesse:importCommesse,parseCsv:parseCsv,importText:importText,matrixTable:matrixTable,agg:agg,ceAgg:ceAgg,commCe:commCe,ceMatrix:ceMatrix,period:period,S:function(){return S;},FS:function(){return FS;},fsAdopt:fsAdopt,fsLink:fsLink};
 })();
 </script>
 
