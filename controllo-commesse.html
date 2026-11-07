@@ -148,10 +148,56 @@ table.scala tr.gap td{border:0;padding:4px}
 .rform label{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600;margin-bottom:4px}
 .rform input,.rform select{width:100%}
 .sosp{background:var(--warn-soft);border-radius:10px;padding:12px 14px;font-size:13.5px}
+/* stampa e PDF */
+.printhead{display:none}
+.printbar{display:flex;justify-content:flex-end}
+@media print{
+  @page{size:A4 landscape;margin:11mm 10mm 12mm}
+  :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+    --bg:#FFFFFF; --surface:#FFFFFF; --ink:#1B1F21; --muted:#5E5A54; --line:#CFCAC2; --line2:#EEEBE6;
+    --accent:#2E4D5A; --accent-ink:#FFFFFF; --accent-soft:#DCE6E9; --sand:#E9E1D3;
+    --good:#2C7A4C; --good-soft:#DCEFE3; --warn:#9C6410; --warn-soft:#F5E8D2; --bad:#AB3636; --bad-soft:#F6DEDB;
+    --s1:#2E4D5A; --s2:#B07A3B; --s3:#6F8F6A; --s4:#8B6F94; --s5:#9AA3A8; --logo:var(--logo-g); color-scheme:light}
+  html,body{background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{font-size:10.5px}
+  .wrap{max-width:none;padding:0}
+  header.top,nav.tabs,#demo,.toast,.nojs,.ctip,.printbar,.noprint,.pform,.rform,.seg,#cCustom,#pCustom,button,select,input[type=date],input[type=number],input[type=text]{display:none!important}
+  .printhead{display:flex;align-items:center;gap:16px;padding-bottom:8px;margin-bottom:10px;border-bottom:1.5px solid var(--accent)}
+  .printhead .logo{height:46px}
+  .printhead .ph-t{flex:1}
+  .printhead .ph-k{font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:600}
+  .printhead h1{font-size:22px;margin:2px 0}
+  .printhead .ph-s{font-size:11px;color:var(--ink)}
+  .printhead .ph-d{font-size:9.5px;color:var(--muted);text-align:right;white-space:nowrap}
+  .view{padding:0;gap:10px}
+  .view:not([hidden]){display:flex!important}
+  .panel,.kpi{border-radius:6px;padding:10px 12px;box-shadow:none}
+  .panel{break-inside:auto}
+  .kpis,.facts,.info,.prog,.cumwrap,svg{break-inside:avoid}
+  .kpi b{font-size:20px}
+  h1{font-size:20px} h2{font-size:15px;break-after:avoid} h3{font-size:13px;break-after:avoid}
+  .sechead{break-after:avoid}
+  .tblwrap{overflow:visible!important;max-height:none!important;border-radius:4px}
+  table{font-size:9px}
+  th,td{padding:3px 5px}
+  thead th{position:static;font-size:8px;white-space:normal}
+  thead{display:table-header-group}
+  tr{break-inside:avoid}
+  tr.click:hover td{background:none}
+  .pill{font-size:8.5px;padding:1px 5px}
+  .hint{font-size:9.5px}
+  .grid2{gap:10px;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)!important}
+  .kpis{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:8px}
+  #v-com .grid2.last{grid-template-columns:minmax(0,1fr)!important}
+  #v-ce .grid2{grid-template-columns:minmax(0,1fr)!important}
+  .sechead .btns{display:none!important}
+  a{color:inherit;text-decoration:none}
+}
 </style>
 
 <div class="wrap">
 <div id="nojs" class="nojs" role="alert"><b>La pagina è aperta in anteprima e qui non può funzionare.</b> I pulsanti non rispondono perché l'anteprima di Drive, di Gmail o dell'app File non avvia le pagine. Apri il link ricevuto con Safari o Chrome.</div>
+<div class="printhead" aria-hidden="true"><span class="logo"></span><div class="ph-t"><div class="ph-k">Doppionodo Interior Snc · Controllo di gestione</div><h1 id="phTit"></h1><div class="ph-s" id="phSub"></div></div><div class="ph-d" id="phData"></div></div>
 <header class="top">
   <div class="brand"><span class="logo" role="img" aria-label="Doppionodo Interior and Rendering Studio"></span><div class="label"><div class="mark">Controllo di gestione</div><div class="sub">ore e commesse</div></div></div>
   <div class="period">
@@ -182,6 +228,7 @@ table.scala tr.gap td{border:0;padding:4px}
 
 <!-- CRUSCOTTO -->
 <section class="view" id="v-cru">
+  <div class="printbar"><button class="btn ghost" type="button" data-print="v-cru">Stampa o salva in PDF</button></div>
   <div class="kpis" id="kpis"></div>
   <div class="grid2">
     <div class="panel"><div class="sechead"><h2>Ore per settimana</h2><span class="hint">ultime 10 settimane del periodo, per persona</span></div><div id="chart"></div></div>
@@ -195,14 +242,14 @@ table.scala tr.gap td{border:0;padding:4px}
 <section class="view" id="v-mat" hidden>
   <div class="sechead"><div><h1>Matrice commesse</h1><p class="hint">Valori del periodo scelto in alto. Le ore sono valorizzate due volte: a costo (costo orario di chi le ha fatte) e a tariffa (prezzo orario dell'attività). Tocca una riga per il dettaglio.</p></div>
     <div class="btns"><label for="mStato" class="muted" style="font-size:12px">Mostra</label><select id="mStato"><option value="tutte">Tutte le commesse</option><option value="aperte" selected>Solo aperte</option><option value="attivita">Con ore nel periodo</option></select>
-    <button class="btn" type="button" id="xXlsx">Esporta in Excel</button><button class="btn ghost" type="button" id="xCsv">CSV</button><button class="btn ghost" type="button" id="xCopy">Copia tabella</button></div></div>
+    <button class="btn ghost" type="button" data-print="v-mat">Stampa o salva in PDF</button><button class="btn" type="button" id="xXlsx">Esporta in Excel</button><button class="btn ghost" type="button" id="xCsv">CSV</button><button class="btn ghost" type="button" id="xCopy">Copia tabella</button></div></div>
   <div class="tblwrap"><table id="tMat"></table></div>
   <p class="hint">Situazione: <span class="pill p-ok">In corso</span> ore nelle ultime due settimane · <span class="pill p-warn">Ferma</span> nessuna ora da oltre 14 giorni · <span class="pill p-bad">Margine negativo</span> il valore a tariffa non copre il costo delle ore · <span class="pill p-warn">Ore non fatturabili alte</span> oltre il 25% del tempo su attività non a tariffa · <span class="pill p-bad">Oltre il piano</span> le ore registrate superano quelle pianificate · <span class="pill p-warn">Sopra il ritmo</span> oggi le ore sono oltre il 10% sopra quelle che il piano prevedeva a questa data · <span class="pill p-warn">Stima oltre il piano</span> al ritmo delle ultime 4 settimane la commessa chiuderà sopra il piano.</p>
 </section>
 
 <!-- COMMESSA -->
 <section class="view" id="v-com" hidden>
-  <div class="sechead"><h1 id="cTit">Commessa</h1><select id="cSel" aria-label="Scegli la commessa"></select></div>
+  <div class="sechead"><h1 id="cTit">Commessa</h1><div class="btns"><select id="cSel" aria-label="Scegli la commessa"></select><button class="btn ghost" type="button" data-print="v-com">Stampa o salva in PDF</button></div></div>
   <div class="cper">
     <span class="cper-l">Periodo di valutazione</span>
     <div class="seg" role="group" aria-label="Periodo di valutazione della commessa" id="cSeg">
@@ -234,16 +281,20 @@ table.scala tr.gap td{border:0;padding:4px}
     <div class="grid2" style="margin-top:16px"><div><h3>Spese</h3><div class="tblwrap" style="margin-top:8px;max-height:360px"><table id="cSp"></table></div></div><div><h3>Fatture emesse</h3><div class="tblwrap" style="margin-top:8px;max-height:360px"><table id="cRi"></table></div></div></div>
   </div>
   <div class="panel"><div class="sechead"><h2>Attività per persona</h2><span class="hint">ore nel periodo; costo e valore per attività</span></div><div class="tblwrap" style="margin-top:12px"><table id="cMat"></table></div></div>
-  <div class="grid2">
+  <div class="grid2 last">
     <div class="panel"><h2>Andamento settimanale</h2><div id="cChart"></div></div>
-    <div class="panel"><div class="sechead"><h2>Registrazioni</h2><select id="cPers" aria-label="Filtra per persona"></select></div><div class="tblwrap" style="margin-top:12px;max-height:420px"><table id="cReg"></table></div></div>
+    <div class="panel noprint"><div class="sechead"><h2>Registrazioni</h2><select id="cPers" aria-label="Filtra per persona"></select></div><div class="tblwrap" style="margin-top:12px;max-height:420px"><table id="cReg"></table></div></div>
   </div>
 </section>
 
 <!-- CONTO ECONOMICO -->
 <section class="view" id="v-ce" hidden>
   <div class="sechead"><div><h1>Conto economico</h1><p class="hint">Il conto economico di gestione, per capire mese per mese se lo studio guadagna e su che cosa. Non sostituisce quello del commercialista: mancano ammortamenti, IRAP e imposte, e i numeri sono senza IVA.</p></div>
-    <div class="btns"><button class="btn" type="button" id="ceXlsx">Esporta in Excel</button><button class="btn ghost" type="button" id="ceCopy">Copia la scala</button></div></div>
+    <div class="btns"><button class="btn ghost" type="button" data-print="v-ce">Stampa o salva in PDF</button><button class="btn" type="button" id="ceXlsx">Esporta in Excel</button><button class="btn ghost" type="button" id="ceCopy">Copia la scala</button></div></div>
+  <div class="panel noprint"><div class="sechead"><div><h2>Al modello Excel del conto economico</h2><p class="hint">Prepara i dati di un anno, mese per mese, già divisi nelle righe del foglio «Consuntivo» del modello Excel (quarta edizione). Nel modello si incollano nel foglio «Dati console», cella A4: il consuntivo si aggiorna da solo.</p></div>
+    <div class="btns"><label for="modAnno" class="muted" style="font-size:12px">Anno</label><select id="modAnno"></select><button class="btn" type="button" id="modCopy">Copia per il modello Excel</button></div></div>
+    <textarea id="modTxt" rows="4" class="mono" readonly hidden style="margin-top:10px" aria-label="Dati per il modello"></textarea>
+    <p class="hint" id="modInfo" style="margin-top:8px"></p></div>
   <div class="kpis" id="ceKpi"></div>
   <div class="panel"><div class="sechead"><h2>La scala, mese per mese</h2><span class="hint">periodo scelto in alto · euro senza IVA</span></div>
     <div class="tblwrap" style="margin-top:12px"><table class="scala" id="ceScala"></table></div>
@@ -262,7 +313,7 @@ table.scala tr.gap td{border:0;padding:4px}
       <div><label for="rNote">Nota</label><input id="rNote" placeholder="es. acconto 40% arredi"></div>
       <div><button class="btn" type="button" id="rAdd" style="width:100%">Registra fattura</button></div>
     </div>
-    <p class="hint" style="margin-top:8px">IVA vuota = 22% dell'imponibile. Per le forniture non imponibili (per esempio art. 8-bis su yacht commerciali) scrivete 0.</p>
+    <p class="hint noprint" style="margin-top:8px">IVA vuota = 22% dell'imponibile. Per le forniture non imponibili (per esempio art. 8-bis su yacht commerciali) scrivete 0.</p>
     <div class="tblwrap" style="margin-top:12px;max-height:420px"><table id="ceRic"></table></div></div>
   <div class="grid2">
     <div class="panel"><div class="sechead"><h2>Spese del periodo</h2><select id="ceVoce" aria-label="Filtra per voce"><option value="">Tutte le voci</option><option value="arredi">Costi diretti degli arredi</option><option value="servizi">Costi diretti dei servizi</option><option value="struttura">Costi dello studio</option></select></div>
@@ -306,7 +357,7 @@ table.scala tr.gap td{border:0;padding:4px}
       <textarea id="cfgTxt" rows="4" class="mono" readonly hidden style="margin-top:10px" aria-label="Codice di configurazione"></textarea></div>
     <div class="panel"><h2>Archivio della console</h2><p class="hint" style="margin-top:6px">Tutto resta in questo browser. Scaricate l'archivio almeno una volta al mese e conservatelo su Drive: è la vostra copia di sicurezza e serve per aprire la console da un altro computer.</p>
       <div class="btns" style="margin-top:10px"><button class="btn" type="button" id="bDown">Scarica l'archivio</button><label class="btn ghost" for="bFile">Ripristina da archivio<input type="file" id="bFile" accept=".json,application/json" hidden></label></div>
-      <p class="hint">Versione 3 · 29 ottobre 2026 · con spese, fatture e conto economico</p>
+      <p class="hint">Versione 3.4 · 7 novembre 2026 · con spese, fatture, conto economico, stampa e modello Excel</p>
       <p class="hint" id="bInfo" style="margin-top:8px"></p></div>
   </div>
 </section>
@@ -320,9 +371,19 @@ var nj=document.getElementById("nojs");if(nj)nj.remove();
 var KEY="dn_controllo_commesse_v1";
 var VOCI={arredi:"Costi diretti degli arredi",servizi:"Costi diretti dei servizi",struttura:"Costi dello studio"};
 var CAT_DEF=[
-  {nome:"Arredi acquistati dai marchi",voce:"arredi"},{nome:"Trasporto e consegna arredi",voce:"arredi"},{nome:"Montaggio e allestimento",voce:"arredi"},{nome:"Campionature",voce:"arredi"},
-  {nome:"Collaboratori esterni",voce:"servizi"},{nome:"Stampe e plottaggi",voce:"servizi"},{nome:"Viaggi e trasferte",voce:"servizi"},{nome:"Vitto e alloggio in trasferta",voce:"servizi"},{nome:"Materiali per la commessa",voce:"servizi"},
-  {nome:"Affitto e spese dello studio",voce:"struttura"},{nome:"Software e abbonamenti",voce:"struttura"},{nome:"Telefono e internet",voce:"struttura"},{nome:"Commercialista e consulenze",voce:"struttura"},{nome:"Assicurazioni",voce:"struttura"},{nome:"Sito, marketing e stampati",voce:"struttura"},{nome:"Banca e commissioni",voce:"struttura"},{nome:"Cancelleria e piccole spese",voce:"struttura"},{nome:"Formazione ed eventi",voce:"struttura"},{nome:"Attrezzature e computer",voce:"struttura"}];
+  {nome:"Arredi acquistati dai marchi",voce:"arredi"},{nome:"Trasporto e consegna arredi",voce:"arredi"},{nome:"Montaggio e allestimento",voce:"arredi"},{nome:"Assicurazione merci e imballi",voce:"arredi"},
+  {nome:"Collaboratori esterni",voce:"servizi"},{nome:"Campionature",voce:"servizi"},{nome:"Stampe e plottaggi",voce:"servizi"},{nome:"Viaggi e trasferte",voce:"servizi"},{nome:"Vitto e alloggio in trasferta",voce:"servizi"},{nome:"Materiali per la commessa",voce:"servizi"},
+  {nome:"Affitto e spese dello studio",voce:"struttura"},{nome:"Software e abbonamenti",voce:"struttura"},{nome:"Telefono e internet",voce:"struttura"},{nome:"Commercialista e consulenze",voce:"struttura"},{nome:"Assicurazioni",voce:"struttura"},{nome:"Sito, marketing e stampati",voce:"struttura"},{nome:"Banca e commissioni",voce:"struttura"},{nome:"Cancelleria e piccole spese",voce:"struttura"},{nome:"Formazione ed eventi",voce:"struttura"},{nome:"Legale e contratti",voce:"struttura"},{nome:"Campionario e cataloghi",voce:"struttura"},{nome:"Auto e carburante",voce:"struttura"},{nome:"Attrezzature e computer",voce:"struttura"}];
+/* righe del foglio «Consuntivo» del modello Excel del conto economico (terza edizione e successive) */
+var MOD_RIGHE=[[6,"Progetti refit e restyle yacht"],[7,"Supporto a studi capofila e contractor"],[8,"Project management interni"],[9,"Survey a bordo"],[10,"Residenziale (progetto)"],[11,"Vendita arredi pronti"],
+  [16,"Collaboratori esterni (render, disegnatori)"],[17,"Trasferte e sopralluoghi"],[18,"Campionature, stampe, materiali di progetto"],
+  [20,"Acquisto arredi (costo del venduto)"],[21,"Trasporto e consegna"],[22,"Montaggio e installatori"],[23,"Assicurazione merci e imballi"],
+  [31,"Affitto studio"],[32,"Utenze e connettività"],[33,"Software e licenze"],[34,"Commercialista, Camera di Commercio, PEC"],[35,"Assicurazioni: RC professionale e prodotti"],[36,"Legale: condizioni di vendita e contratti"],[37,"Campionario e cataloghi"],[38,"Marketing, sito, fiere, rappresentanza"],[39,"Telefoni e auto (quota aziendale)"],[40,"Cancelleria e spese varie"],[41,"Spese bancarie e POS"]];
+var MOD_CAT={"arredi acquistati dai marchi":20,"trasporto e consegna arredi":21,"montaggio e allestimento":22,"assicurazione merci e imballi":23,"campionature":18,
+  "collaboratori esterni":16,"stampe e plottaggi":18,"viaggi e trasferte":17,"vitto e alloggio in trasferta":17,"materiali per la commessa":18,
+  "affitto e spese dello studio":31,"software e abbonamenti":33,"telefono e internet":32,"commercialista e consulenze":34,"assicurazioni":35,"legale e contratti":36,"campionario e cataloghi":37,"sito, marketing e stampati":38,"formazione ed eventi":38,"auto e carburante":39,"cancelleria e piccole spese":40,"banca e commissioni":41,"attrezzature e computer":40};
+var MOD_TIPO={"Yacht – refit":6,"Yacht – restyle":6,"Supporto a capofila":7,"Yacht – project management":8,"Yacht – survey":9,"Residenziale":10};
+function rigaCat(k,voce){if(k&&+k.riga)return +k.riga;var n=k?String(k.nome).toLowerCase():"";if(MOD_CAT[n])return MOD_CAT[n];return voce==="arredi"?20:voce==="servizi"?18:40;}
 var TIPI=["Yacht – refit","Yacht – restyle","Yacht – survey","Yacht – project management","Fornitura arredi","Residenziale","Supporto a capofila","Interno"];
 /* ---------- utilità ---------- */
 function pad(n){return String(n).padStart(2,"0");}
@@ -398,7 +459,12 @@ function demo(){
 var S;
 function load(){try{var r=localStorage.getItem(KEY);if(r){var s=JSON.parse(r),b=defaults(),nuovo=!("spese" in s);for(var k in b)if(!(k in s))s[k]=b[k];
   /* console della versione 2 ancora con gli esempi: aggiunge anche spese e fatture d'esempio */
-  if(nuovo&&s.esempio)demoSpese(s);return s;}}catch(e){}return demo();}
+  if(nuovo&&s.esempio)demoSpese(s);
+  /* 3.4: categorie allineate al modello Excel del conto economico */
+  if(!s.cat34){s.cat34=1;var have={};s.categorie.forEach(function(k){have[k.nome.toLowerCase()]=k;});
+    if(have["campionature"]&&have["campionature"].voce==="arredi")have["campionature"].voce="servizi";
+    CAT_DEF.forEach(function(k){if(!have[k.nome.toLowerCase()])s.categorie.push({nome:k.nome,voce:k.voce});});}
+  return s;}}catch(e){}return demo();}
 S=load();
 function save(){S.salvato=nowIso();try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){toast("Il browser non riesce a salvare: scaricate l'archivio per non perdere i dati");}}
 
@@ -698,7 +764,7 @@ document.getElementById("cPers").addEventListener("change",renderCommessa);
 
 /* ---------- conto economico: scheda ---------- */
 function negCls(v){return v<0?" neg":"";}
-function renderCe(){var P=period(),D=ceData(P),T=D.T;
+function renderCe(){renderMod();var P=period(),D=ceData(P),T=D.T;
   var unpaid=S.ricavi.filter(function(r){return !r.incassata;}),daInc=unpaid.reduce(function(s,r){return s+(+r.imponibile||0)+(+r.iva||0);},0);
   document.getElementById("ceKpi").innerHTML=[["Ricavi",eur(T.ric),"servizi "+eur(T.ricS)+" · arredi "+eur(T.ricA)],["Margine di contribuzione",eur(T.mc),T.ric?pct(T.mcPct)+" dei ricavi":"–",T.mc<0],["Costi dello studio",eur(T.fis),"affitto, software, consulenze, assicurazioni…"],["Risultato di gestione",eur(T.ris),"dopo il tempo delle socie: "+eur(T.dopo),T.ris<0],["Da incassare",eur(daInc),unpaid.length+" fatture, IVA compresa, da tutto lo storico"]].map(function(k){return '<div class="kpi"><span>'+k[0]+'</span><b'+(k[3]?' class="neg"':"")+'>'+k[1]+'</b><small>'+k[2]+"</small></div>";}).join("");
   var t=document.getElementById("ceScala");
@@ -744,6 +810,26 @@ document.getElementById("rAdd").addEventListener("click",function(){var d=docume
   ["rNum","rImp","rIva","rNote"].forEach(function(id){document.getElementById(id).value="";});save();renderCe();toast("Fattura registrata");});
 function ceSheetRows(){var rows=allCodes().map(function(c){return {c:c,o:commCe(c)};}).filter(function(r){return r.o.nR||r.o.nS||r.o.oreS;});
   return [["Codice","Commessa","Ricavi servizi €","Ricavi arredi €","Costo arredi €","Margine arredi %","Altre spese €","Margine di contribuzione €","Margine %","Ore socie","Tempo socie €","Dopo il tempo €","Da incassare €","Arredi consegnati il"]].concat(rows.map(function(r){var o=r.o,c=CM[r.c]||{};return [r.c,c.nome||"",o.ricS,o.ricA,Math.round(o.cdA*100)/100,isFinite(o.arrPct)?Math.round(o.arrPct*1000)/10:"",Math.round(o.altre*100)/100,Math.round(o.mc*100)/100,isFinite(o.mcPct)?Math.round(o.mcPct*1000)/10:"",o.oreS,Math.round(o.socie),Math.round(o.dopo),Math.round(o.daInc*100)/100,c.consegna||""];}));}
+/* ---------- dati per il modello Excel ---------- */
+function rigaRicavo(r){if(r.tipo==="arredi")return 11;var c=CM[r.commessa];return (c&&MOD_TIPO[c.tipo])||6;}
+function modData(anno){var M={};MOD_RIGHE.forEach(function(r){M[r[0]]=[0,0,0,0,0,0,0,0,0,0,0,0];});var fuori=0;
+  var put=function(row,d,v){if(!d||d.slice(0,4)!==String(anno))return;M[row][+d.slice(5,7)-1]+=v;};
+  S.ricavi.forEach(function(r){put(rigaRicavo(r),comp(r),+r.imponibile||0);});
+  S.spese.forEach(function(s){var k=KM[String(s.categoria).toLowerCase()];put(rigaCat(k,voceDi(s)),comp(s),+s.costo||0);});
+  return M;}
+function modAnni(){var y={};y[new Date().getFullYear()]=1;S.ricavi.forEach(function(r){var d=comp(r);if(d)y[d.slice(0,4)]=1;});S.spese.forEach(function(s){var d=comp(s);if(d)y[d.slice(0,4)]=1;});return Object.keys(y).sort();}
+function modText(anno){var M=modData(anno),n=function(v){return v?String(Math.round(v*100)/100).replace(".",","):"0";};
+  var rows=[["Anno",anno,"Esportato dalla console il "+new Date().toLocaleDateString("it-IT")],["Riga","Voce","Gen","Feb","Mar","Apr","Mag","Giu","Lug","Ago","Set","Ott","Nov","Dic"]];
+  MOD_RIGHE.forEach(function(r){rows.push([r[0],r[1]].concat(M[r[0]].map(n)));});
+  return rows.map(function(r){return r.join("\t");}).join("\n");}
+function renderMod(){var s=document.getElementById("modAnno");if(!s)return;var v=s.value,a=modAnni();s.innerHTML=a.map(function(y){return '<option>'+y+'</option>';}).join("");s.value=a.indexOf(v)>=0?v:String(new Date().getFullYear());
+  var M=modData(s.value),tr=0,tc=0;MOD_RIGHE.forEach(function(r){var x=M[r[0]].reduce(function(a,b){return a+b;},0);if(r[0]<=11)tr+=x;else tc+=x;});
+  var so=Object.keys(sospesi()).length;
+  document.getElementById("modInfo").textContent="Anno "+s.value+": ricavi "+eur(tr)+", costi "+eur(tc)+" (senza IVA)."+(so?" Arredi in sospeso su "+so+" commesse: entreranno nel mese della consegna.":"")+" Ammortamenti e oneri finanziari si scrivono a mano nel modello.";}
+document.getElementById("modAnno").addEventListener("change",renderMod);
+document.getElementById("modCopy").addEventListener("click",function(){var txt=modText(document.getElementById("modAnno").value),ta=document.getElementById("modTxt");ta.value=txt;
+  var fb=function(){ta.hidden=false;ta.focus();ta.select();toast("Testo selezionato: copialo e incollalo nel foglio «Dati console», cella A4");};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(txt).then(function(){ta.hidden=true;toast("Copiato: nel modello, foglio «Dati console», seleziona A4 e incolla");}).catch(fb);else fb();});
 document.getElementById("ceCopy").addEventListener("click",function(){var t=ceMatrix(period()).map(function(r){return r.map(function(v){return typeof v==="number"?String(v).replace(".",","):String(v);}).join("\t");}).join("\n");
   if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(function(){toast("Scala copiata: incollala in Excel");}).catch(function(){toast("Copia non riuscita in questo browser");});else toast("Copia non disponibile in questo browser");});
 document.getElementById("ceXlsx").addEventListener("click",function(){withXlsx(function(){var P=period(),wb=XLSX.utils.book_new();
@@ -859,8 +945,8 @@ function renderMove(){var da=document.getElementById("mvDa"),pe=document.getElem
   var eC=document.getElementById("eC");eC.innerHTML='<thead><tr><th>Codice</th><th>Descrizione</th><th>Cliente</th><th>Tipo</th><th>Formula</th><th>Stato</th><th>Inizio</th><th class="n">Ore pianificate</th><th>Fine prevista</th><th>Consegna arredi</th><th>Referente</th><th>Note</th><th></th></tr></thead><tbody>'+S.commesse.map(function(c,i){
     return '<tr><td><input id="c'+i+'k" data-i="'+i+'" data-f="codice" value="'+esc(c.codice)+'" style="width:110px"'+(c.codice==="INT"?" readonly":"")+'></td><td><input id="c'+i+'n" data-i="'+i+'" data-f="nome" value="'+esc(c.nome)+'" style="min-width:220px"></td><td><input id="c'+i+'c" data-i="'+i+'" data-f="cliente" value="'+esc(c.cliente)+'" style="min-width:160px"></td><td><select id="c'+i+'t" data-i="'+i+'" data-f="tipo">'+TIPI.map(function(t){return "<option"+(t===c.tipo?" selected":"")+">"+t+"</option>";}).join("")+'</select></td><td><input id="c'+i+'f" data-i="'+i+'" data-f="formula" value="'+esc(c.formula)+'" style="min-width:150px"></td><td><select id="c'+i+'s" data-i="'+i+'" data-f="stato"><option value="aperta"'+(c.stato!=="chiusa"?" selected":"")+'>aperta</option><option value="chiusa"'+(c.stato==="chiusa"?" selected":"")+'>chiusa</option></select></td><td><input id="c'+i+'d" type="date" data-i="'+i+'" data-f="inizio" value="'+esc(c.inizio)+'"></td><td class="n">'+(c.codice==="INT"?"":'<input id="c'+i+'p" type="number" min="0" step="1" data-i="'+i+'" data-f="orePiano" value="'+(c.orePiano||"")+'" placeholder="–">')+'</td><td>'+(c.codice==="INT"?"":'<input id="c'+i+'e" type="date" data-i="'+i+'" data-f="fine" value="'+esc(c.fine||"")+'">')+'</td><td>'+(c.codice==="INT"?"":'<input id="c'+i+'g" type="date" data-i="'+i+'" data-f="consegna" value="'+esc(c.consegna||"")+'">')+'</td><td><input id="c'+i+'r" data-i="'+i+'" data-f="referente" value="'+esc(c.referente)+'" style="width:110px"></td><td><input id="c'+i+'o" data-i="'+i+'" data-f="note" value="'+esc(c.note)+'" style="min-width:140px"></td><td>'+(c.codice==="INT"?"":'<button class="btn danger small" type="button" data-del="'+i+'">Elimina</button>')+"</td></tr>";}).join("")+"</tbody>";
   bindEdit(eC,S.commesse);
-  var eK=document.getElementById("eK");eK.innerHTML='<thead><tr><th>Categoria (come nel registro spese)</th><th>Voce del conto economico</th><th class="n">Spese registrate</th><th></th></tr></thead><tbody>'+S.categorie.map(function(k,i){var n=S.spese.filter(function(s){return String(s.categoria).toLowerCase()===k.nome.toLowerCase();}).length;
-    return '<tr><td><input id="k'+i+'n" data-i="'+i+'" data-f="nome" value="'+esc(k.nome)+'" style="min-width:240px"></td><td><select id="k'+i+'v" data-i="'+i+'" data-f="voce">'+Object.keys(VOCI).map(function(v){return '<option value="'+v+'"'+(k.voce===v?" selected":"")+">"+VOCI[v]+"</option>";}).join("")+'</select></td><td class="n">'+n+'</td><td>'+(n?'<span class="muted" style="font-size:12px">in uso</span>':'<button class="btn danger small" type="button" data-del="'+i+'">Elimina</button>')+"</td></tr>";}).join("")+"</tbody>";
+  var eK=document.getElementById("eK");eK.innerHTML='<thead><tr><th>Categoria (come nel registro spese)</th><th>Voce del conto economico</th><th>Riga del modello Excel</th><th class="n">Spese registrate</th><th></th></tr></thead><tbody>'+S.categorie.map(function(k,i){var n=S.spese.filter(function(s){return String(s.categoria).toLowerCase()===k.nome.toLowerCase();}).length;
+    return '<tr><td><input id="k'+i+'n" data-i="'+i+'" data-f="nome" value="'+esc(k.nome)+'" style="min-width:240px"></td><td><select id="k'+i+'v" data-i="'+i+'" data-f="voce">'+Object.keys(VOCI).map(function(v){return '<option value="'+v+'"'+(k.voce===v?" selected":"")+">"+VOCI[v]+"</option>";}).join("")+'</select></td><td><select id="k'+i+'r" data-i="'+i+'" data-f="riga"><option value="">Automatica ('+rigaCat({nome:k.nome},k.voce)+')</option>'+MOD_RIGHE.filter(function(r){return r[0]>=16;}).map(function(r){return '<option value="'+r[0]+'"'+(+k.riga===r[0]?" selected":"")+">"+r[0]+" · "+esc(r[1])+"</option>";}).join("")+'</select></td><td class="n">'+n+'</td><td>'+(n?'<span class="muted" style="font-size:12px">in uso</span>':'<button class="btn danger small" type="button" data-del="'+i+'">Elimina</button>')+"</td></tr>";}).join("")+"</tbody>";
   bindEdit(eK,S.categorie);
   document.getElementById("bInfo").textContent="Nella console: "+S.entries.length+" registrazioni di ore, "+S.spese.length+" spese, "+S.ricavi.length+" fatture emesse, "+S.commesse.length+" commesse."+(S.ultimoArchivio?" Ultimo archivio scaricato il "+new Date(S.ultimoArchivio).toLocaleDateString("it-IT")+".":" Archivio mai scaricato.");}
 document.getElementById("addP").addEventListener("click",function(){S.persone.push({nome:uniq(S.persone,"Nuova persona"),ruolo:"collaboratore",costo:0,oreSett:40});save();maps();renderAll();document.getElementById("p"+(S.persone.length-1)+"n").select();});
@@ -878,6 +964,19 @@ document.getElementById("mvA").addEventListener("change",renderMove);
 arm(document.getElementById("mvGo"),"Conferma lo spostamento",function(){var da=document.getElementById("mvDa").value,a=document.getElementById("mvA").value,pe=document.getElementById("mvPers").value;
   if(!da||!a){toast("Scegli il codice da correggere e la commessa giusta");return;}
   var n=moveCommessa(da,a,pe);save();maps();renderAll();toast(n+" registrazioni spostate su "+a);});
+/* ---------- stampa e PDF ---------- */
+var PR_TIT={"v-cru":"Cruscotto","v-mat":"Matrice commesse","v-com":"Andamento della commessa","v-ce":"Conto economico di gestione"};
+function doPrint(v){if(cur!==v)show(v);var P=period(),sub="",file="";
+  if(v==="v-com"){var c=CM[curC]||{};sub=curC+(c.nome?" · "+c.nome:"")+(c.cliente?" · "+c.cliente:"")+" — periodo di valutazione: "+(document.getElementById("cPerLbl").textContent||"dall'avvio")+". Conto economico della commessa dall'avvio.";file=curC;}
+  else if(v==="v-mat"){var ms=document.getElementById("mStato");sub="Periodo: "+P.lbl+" · "+ms.options[ms.selectedIndex].text;file=P.lbl;}
+  else if(v==="v-ce"){sub="Periodo: "+P.lbl+" · importi senza IVA · arredi alla data di consegna · esclusi ammortamenti, IRAP e imposte";file=P.lbl;}
+  else{sub="Periodo: "+P.lbl;file=P.lbl;}
+  document.getElementById("phTit").textContent=PR_TIT[v];document.getElementById("phSub").textContent=sub;
+  var now=new Date();document.getElementById("phData").textContent="Stampato il "+now.toLocaleDateString("it-IT")+" alle "+now.toLocaleTimeString("it-IT",{hour:"2-digit",minute:"2-digit"});
+  var old=document.title;document.title=("Doppionodo "+PR_TIT[v]+" "+file+" "+ymd(now)).replace(/[^\w\-àèéìòù ]+/gi," ").replace(/\s+/g,"_");
+  var back=function(){document.title=old;window.removeEventListener("afterprint",back);};window.addEventListener("afterprint",back);
+  setTimeout(function(){try{window.print();}catch(e){toast("La stampa non è disponibile in questa finestra: apri la console nel browser");}setTimeout(back,1500);},60);}
+[].forEach.call(document.querySelectorAll("[data-print]"),function(b){b.addEventListener("click",function(){doPrint(b.dataset.print);});});
 function clearDemo(){var keepA=S.attivita,keepK=S.categorie;S=defaults();S.attivita=keepA;S.categorie=keepK;S.persone=[{nome:"Claudia Clausi",ruolo:"socia",costo:0,oreSett:40},{nome:"Anita Verner",ruolo:"socia",costo:0,oreSett:40}];}
 arm(document.getElementById("demoClear"),"Conferma: cancella tutti gli esempi",function(){clearDemo();save();maps();renderAll();show("v-ana");toast("Esempi cancellati: ora inserite costi e tariffe reali");});
 
@@ -931,7 +1030,7 @@ document.getElementById("pSel").addEventListener("change",function(){document.ge
 ["pDa","pA"].forEach(function(id){document.getElementById(id).addEventListener("change",function(){renderAll();});});
 var h=location.hash.replace("#","");if(h==="matrice")cur="v-mat";else if(h==="importa")cur="v-imp";else if(h==="conto")cur="v-ce";
 show(cur);
-window.__dn={moveCommessa:moveCommessa,importCommesse:importCommesse,parseCsv:parseCsv,importText:importText,matrixTable:matrixTable,agg:agg,ceAgg:ceAgg,commCe:commCe,ceMatrix:ceMatrix,period:period,S:function(){return S;}};
+window.__dn={modData:modData,modText:modText,moveCommessa:moveCommessa,importCommesse:importCommesse,parseCsv:parseCsv,importText:importText,matrixTable:matrixTable,agg:agg,ceAgg:ceAgg,commCe:commCe,ceMatrix:ceMatrix,period:period,S:function(){return S;}};
 })();
 </script>
 
